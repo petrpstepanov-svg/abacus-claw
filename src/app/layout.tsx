@@ -15,7 +15,7 @@ export default function RootLayout({
           <html lang="ru">
                 <body className="font-manrope bg-background text-secondary antialiased">
                   {children}
-                </body>body>
-          </html>html>
+                </body>
+          </html>
         );
-}</html>
+}
