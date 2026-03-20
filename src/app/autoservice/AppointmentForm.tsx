@@ -1,9 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input, Button, PhoneMask } from '@/components/ui';
 import { appointmentFormSchema, type AppointmentFormData } from '@/schemas';
+import { getUtmFromUrl } from '@/lib/utm';
+import type { LeadCreateResponse } from '@/types/api';
 
 const SERVICE_OPTIONS = [
   'Замена масла',
@@ -16,23 +19,81 @@ const SERVICE_OPTIONS = [
 ] as const;
 
 export function AppointmentForm() {
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+
   const {
     register,
     control,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<AppointmentFormData>({
     resolver: zodResolver(appointmentFormSchema),
     defaultValues: { consent: true },
   });
 
-  const onSubmit = (data: AppointmentFormData) => {
-    console.log('Appointment form data:', data);
-    alert('Заявка отправлена! Мы перезвоним для подтверждения.');
+  const onSubmit = async (data: AppointmentFormData) => {
+    setServerError(null);
+    setIsSuccess(false);
+
+    try {
+      const utm = getUtmFromUrl();
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: data.name,
+          phone: data.phone,
+          service: data.service,
+          comment: data.comment,
+          consent: data.consent,
+          leadType: 'SERVICE' as const,
+          ...utm,
+        }),
+      });
+
+      const result: LeadCreateResponse = await res.json() as LeadCreateResponse;
+
+      if (!result.success) {
+        setServerError(result.error);
+        return;
+      }
+
+      setIsSuccess(true);
+      reset();
+    } catch {
+      setServerError('Ошибка соединения. Попробуйте позже.');
+    }
   };
+
+  if (isSuccess) {
+    return (
+      <div className="rounded-xl bg-green-50 p-6 text-center shadow-lg">
+        <p className="text-lg font-semibold text-green-700">
+          ✅ Заявка отправлена!
+        </p>
+        <p className="mt-2 text-green-600">
+          Мы перезвоним для подтверждения записи.
+        </p>
+        <button
+          type="button"
+          onClick={() => setIsSuccess(false)}
+          className="mt-4 text-sm text-accent underline"
+        >
+          Отправить ещё одну заявку
+        </button>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 rounded-xl bg-white p-6 shadow-lg">
+      {serverError && (
+        <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
+          {serverError}
+        </div>
+      )}
       <Input
         label="Ваше имя"
         placeholder="Иван"

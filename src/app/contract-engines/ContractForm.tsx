@@ -1,40 +1,88 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Input, Button, PhoneMask } from '@/components/ui';
-
-const contractFormSchema = z.object({
-  name: z.string().min(2, 'Имя должно содержать минимум 2 символа'),
-  phone: z.string().regex(/^\+7\d{10}$/, 'Введите корректный номер телефона'),
-  carModel: z.string().min(2, 'Укажите марку и модель авто'),
-  aggregate: z.string().min(1, 'Укажите нужный агрегат'),
-  consent: z.literal(true, {
-    error: 'Необходимо согласие на обработку персональных данных',
-  }),
-});
-
-type ContractFormData = z.infer<typeof contractFormSchema>;
+import { contractFormSchema, type ContractFormData } from '@/schemas';
+import { getUtmFromUrl } from '@/lib/utm';
+import type { LeadCreateResponse } from '@/types/api';
 
 export function ContractForm() {
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+
   const {
     register,
     control,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<ContractFormData>({
     resolver: zodResolver(contractFormSchema),
     defaultValues: { consent: true },
   });
 
-  const onSubmit = (data: ContractFormData) => {
-    console.log('Contract form data:', data);
-    alert('Заявка отправлена! Мы подберём агрегат и перезвоним.');
+  const onSubmit = async (data: ContractFormData) => {
+    setServerError(null);
+    setIsSuccess(false);
+
+    try {
+      const utm = getUtmFromUrl();
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: data.name,
+          phone: data.phone,
+          comment: `Авто: ${data.carModel}. Агрегат: ${data.aggregate}`,
+          consent: data.consent,
+          leadType: 'CONTRACT' as const,
+          ...utm,
+        }),
+      });
+
+      const result: LeadCreateResponse = await res.json() as LeadCreateResponse;
+
+      if (!result.success) {
+        setServerError(result.error);
+        return;
+      }
+
+      setIsSuccess(true);
+      reset();
+    } catch {
+      setServerError('Ошибка соединения. Попробуйте позже.');
+    }
   };
+
+  if (isSuccess) {
+    return (
+      <div className="rounded-xl bg-green-50 p-6 text-center shadow-lg">
+        <p className="text-lg font-semibold text-green-700">
+          ✅ Заявка отправлена!
+        </p>
+        <p className="mt-2 text-green-600">
+          Мы подберём агрегат и перезвоним.
+        </p>
+        <button
+          type="button"
+          onClick={() => setIsSuccess(false)}
+          className="mt-4 text-sm text-accent underline"
+        >
+          Отправить ещё одну заявку
+        </button>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 rounded-xl bg-white p-6 shadow-lg">
+      {serverError && (
+        <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
+          {serverError}
+        </div>
+      )}
       <Input
         label="Ваше имя"
         placeholder="Иван"
