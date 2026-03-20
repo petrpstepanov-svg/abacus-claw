@@ -1,11 +1,22 @@
 import type { Metadata } from 'next';
 import { Hero } from '@/components/sections';
+import { buildOpenGraph } from '@/components/seo';
 import { ContractForm } from './ContractForm';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://avtohub161.ru';
 
 export const metadata: Metadata = {
   title: 'Контрактные агрегаты в Ростове-на-Дону — AutoHub Rostov',
   description:
     'Подбор и установка контрактных двигателей, КПП и других агрегатов в Ростове-на-Дону.',
+  alternates: {
+    canonical: `${SITE_URL}/contract-engines`,
+  },
+  ...buildOpenGraph({
+    title: 'Контрактные агрегаты в Ростове-на-Дону',
+    description: 'Подбор и установка контрактных двигателей и КПП с гарантией.',
+    url: `${SITE_URL}/contract-engines`,
+  }),
 };
 
 const ADVANTAGES = [

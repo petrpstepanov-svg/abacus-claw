@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input, Button, PhoneMask } from '@/components/ui';
 import { contractFormSchema, type ContractFormData } from '@/schemas';
 import { getUtmFromUrl } from '@/lib/utm';
+import { reachGoal } from '@/lib/yandex-metrika';
 import type { LeadCreateResponse } from '@/types/api';
 
 export function ContractForm() {
@@ -51,6 +52,13 @@ export function ContractForm() {
 
       setIsSuccess(true);
       reset();
+
+      reachGoal('FORM_SUBMIT_CONTRACT', {
+        leadType: 'CONTRACT',
+        utm_source: utm.utm_source,
+        utm_medium: utm.utm_medium,
+        utm_campaign: utm.utm_campaign,
+      });
     } catch {
       setServerError('Ошибка соединения. Попробуйте позже.');
     }

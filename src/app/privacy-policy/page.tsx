@@ -1,8 +1,19 @@
 import type { Metadata } from 'next';
+import { buildOpenGraph } from '@/components/seo';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://avtohub161.ru';
 
 export const metadata: Metadata = {
   title: 'Политика конфиденциальности — AutoHub Rostov',
   description: 'Политика обработки персональных данных AutoHub Rostov в соответствии с ФЗ-152.',
+  alternates: {
+    canonical: `${SITE_URL}/privacy-policy`,
+  },
+  ...buildOpenGraph({
+    title: 'Политика конфиденциальности',
+    description: 'Политика обработки персональных данных в соответствии с ФЗ-152.',
+    url: `${SITE_URL}/privacy-policy`,
+  }),
 };
 
 const SECTIONS = [

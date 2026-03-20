@@ -1,10 +1,22 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Hero } from '@/components/sections';
+import { buildOpenGraph } from '@/components/seo';
+import { LazyYandexMap } from '@/components/lazy';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://avtohub161.ru';
 
 export const metadata: Metadata = {
   title: 'Контакты — AutoHub Rostov',
   description: 'Контакты AutoHub Rostov. Адрес, телефон, режим работы.',
+  alternates: {
+    canonical: `${SITE_URL}/contacts`,
+  },
+  ...buildOpenGraph({
+    title: 'Контакты AutoHub Rostov',
+    description: 'Адрес, телефон, режим работы AutoHub Rostov.',
+    url: `${SITE_URL}/contacts`,
+  }),
 };
 
 export default function ContactsPage() {
@@ -72,17 +84,9 @@ export default function ContactsPage() {
             </div>
           </div>
 
-          {/* Yandex Map */}
-          <div className="mt-10 rounded-xl overflow-hidden shadow-lg">
-            <iframe
-              src="https://yandex.ru/map-widget/v1/?um=constructor%3Arostov&amp;source=constructor"
-              width="100%"
-              height="400"
-              frameBorder="0"
-              title="Карта AutoHub Rostov"
-              className="w-full"
-              loading="lazy"
-            />
+          {/* Yandex Map (lazy loaded) */}
+          <div className="mt-10">
+            <LazyYandexMap />
           </div>
         </div>
       </section>

@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input, Button, PhoneMask } from '@/components/ui';
 import { appointmentFormSchema, type AppointmentFormData } from '@/schemas';
 import { getUtmFromUrl } from '@/lib/utm';
+import { reachGoal } from '@/lib/yandex-metrika';
 import type { LeadCreateResponse } from '@/types/api';
 
 const SERVICE_OPTIONS = [
@@ -62,6 +63,13 @@ export function AppointmentForm() {
 
       setIsSuccess(true);
       reset();
+
+      reachGoal('FORM_SUBMIT_APPOINTMENT', {
+        leadType: 'SERVICE',
+        utm_source: utm.utm_source,
+        utm_medium: utm.utm_medium,
+        utm_campaign: utm.utm_campaign,
+      });
     } catch {
       setServerError('Ошибка соединения. Попробуйте позже.');
     }

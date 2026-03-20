@@ -1,11 +1,22 @@
 import type { Metadata } from 'next';
 import { Hero } from '@/components/sections';
+import { buildOpenGraph } from '@/components/seo';
 import { SosForm } from './SosForm';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://avtohub161.ru';
 
 export const metadata: Metadata = {
   title: 'Эвакуатор 24/7 в Ростове-на-Дону — AutoHub Rostov',
   description:
     'Эвакуатор круглосуточно. Подача от 30 минут, доступные цены. Ростов и область.',
+  alternates: {
+    canonical: `${SITE_URL}/evacuation`,
+  },
+  ...buildOpenGraph({
+    title: 'Эвакуатор 24/7 в Ростове-на-Дону',
+    description: 'Круглосуточная эвакуация автомобилей. Подача от 30 минут, доступные цены.',
+    url: `${SITE_URL}/evacuation`,
+  }),
 };
 
 const SERVICES = [

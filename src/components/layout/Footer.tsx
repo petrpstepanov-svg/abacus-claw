@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { reachGoal } from '@/lib/yandex-metrika';
 
 const PHONE = '+7 (863) 303-XX-XX';
 const PHONE_HREF = 'tel:+78633030000';
@@ -17,6 +20,10 @@ const INFO_LINKS = [
 ] as const;
 
 export function Footer() {
+  const handlePhoneClick = () => {
+    reachGoal('PHONE_CLICK', { location: 'footer' });
+  };
+
   return (
     <footer className="bg-secondary text-gray-400">
       <div className="mx-auto max-w-7xl px-4 py-12">
@@ -63,7 +70,11 @@ export function Footer() {
             <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-white">Контакты</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href={PHONE_HREF} className="font-mono text-accent hover:text-white transition-colors">
+                <a
+                  href={PHONE_HREF}
+                  onClick={handlePhoneClick}
+                  className="font-mono text-accent hover:text-white transition-colors"
+                >
                   {PHONE}
                 </a>
               </li>

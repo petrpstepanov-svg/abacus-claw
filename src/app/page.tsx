@@ -1,10 +1,30 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Button } from '@/components/ui';
 import { Hero, ServiceCard } from '@/components/sections';
+import { JsonLd, LOCAL_BUSINESS_DATA, buildOpenGraph } from '@/components/seo';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://avtohub161.ru';
+
+export const metadata: Metadata = {
+  title: 'AutoHub Rostov — Эвакуатор, Автосервис, Аварийный комиссар в Ростове-на-Дону',
+  description:
+    'Эвакуатор 24/7, автосервис, аварийный комиссар и контрактные агрегаты в Ростове-на-Дону. Быстро, надёжно, круглосуточно.',
+  alternates: {
+    canonical: SITE_URL,
+  },
+  ...buildOpenGraph({
+    title: 'AutoHub Rostov — Эвакуатор, Автосервис в Ростове-на-Дону',
+    description: 'Эвакуатор 24/7, автосервис, аварийный комиссар и контрактные агрегаты в Ростове-на-Дону.',
+    url: SITE_URL,
+  }),
+};
 
 export default function Home() {
   return (
     <>
+      <JsonLd type="LocalBusiness" data={LOCAL_BUSINESS_DATA} />
+
       {/* Hero */}
       <Hero
         title="AutoHub Rostov"

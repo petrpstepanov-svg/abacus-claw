@@ -2,11 +2,22 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Button } from '@/components/ui';
 import { Hero } from '@/components/sections';
+import { buildOpenGraph } from '@/components/seo';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://avtohub161.ru';
 
 export const metadata: Metadata = {
   title: 'Аварийный комиссар в Ростове-на-Дону — AutoHub Rostov',
   description:
     'Аварийный комиссар в Ростове. Помощь при ДТП, оформление документов, работа со страховыми.',
+  alternates: {
+    canonical: `${SITE_URL}/accident-commissioner`,
+  },
+  ...buildOpenGraph({
+    title: 'Аварийный комиссар в Ростове-на-Дону',
+    description: 'Помощь при ДТП, оформление документов, работа со страховыми компаниями.',
+    url: `${SITE_URL}/accident-commissioner`,
+  }),
 };
 
 const SERVICES = [

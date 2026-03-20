@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { reachGoal } from '@/lib/yandex-metrika';
 
 const NAV_ITEMS = [
   { href: '/evacuation', label: 'Эвакуатор' },
@@ -17,6 +18,10 @@ const PHONE_HREF = 'tel:+78633030000';
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const handlePhoneClick = () => {
+    reachGoal('PHONE_CLICK', { location: 'header' });
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-secondary text-white shadow-lg">
@@ -48,6 +53,7 @@ export function Header() {
         {/* Phone (desktop) */}
         <a
           href={PHONE_HREF}
+          onClick={handlePhoneClick}
           className="hidden lg:inline-flex items-center gap-2 font-mono text-sm font-semibold text-accent hover:text-white transition-colors"
         >
           📞 {PHONE}
@@ -86,6 +92,7 @@ export function Header() {
           ))}
           <a
             href={PHONE_HREF}
+            onClick={handlePhoneClick}
             className="mt-3 block py-3 font-mono font-semibold text-accent"
           >
             📞 {PHONE}

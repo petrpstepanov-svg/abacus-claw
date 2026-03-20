@@ -1,11 +1,22 @@
 import type { Metadata } from 'next';
 import { Hero } from '@/components/sections';
+import { buildOpenGraph } from '@/components/seo';
 import { AppointmentForm } from './AppointmentForm';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://avtohub161.ru';
 
 export const metadata: Metadata = {
   title: 'Автосервис в Ростове-на-Дону — AutoHub Rostov',
   description:
     'Профессиональный автосервис в Ростове-на-Дону. Ремонт, ТО, диагностика автомобилей.',
+  alternates: {
+    canonical: `${SITE_URL}/autoservice`,
+  },
+  ...buildOpenGraph({
+    title: 'Автосервис в Ростове-на-Дону',
+    description: 'Профессиональный автосервис. Ремонт, ТО, диагностика автомобилей.',
+    url: `${SITE_URL}/autoservice`,
+  }),
 };
 
 const SERVICES = [
