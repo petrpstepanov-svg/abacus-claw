@@ -10,3 +10,6 @@ export { sendSmsConfirmation } from './sms';
 
 export { extractUtmParams, getUtmFromUrl } from './utm';
 export type { UtmParams } from './utm';
+
+
+export { validateBearerToken, getAuthToken, setAuthToken, removeAuthToken } from './auth';
