@@ -1,21 +1,62 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Prisma Schema — AutoHub Rostov (abacus-claw)
+// Модель Lead для сбора заявок с сайта
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
 
 generator client {
   provider = "prisma-client-js"
-  }
+}
 
-  datasource db {
-    provider = "postgresql"
-      url      = env("DATABASE_URL")
-      }
+// ─── Enums ──────────────────────────────────────────────
 
-      model Lead {
-        id        Int      @id @default(autoincrement())
-          name      String
-            phone     String
-              service   String
-                message   String?
-                  createdAt DateTime @default(now())
-                    updatedAt DateTime @updatedAt
-                    }
+/// Тип заявки
+enum LeadType {
+  EVACUATION // Эвакуатор
+  SERVICE    // Автосервис
+  ACCIDENT   // Аварийный комиссар
+  CONTRACT   // Контрактные агрегаты
+}
+
+// ─── Models ─────────────────────────────────────────────
+
+/// Заявка с сайта
+model Lead {
+  id   String @id @default(cuid())
+  name String
+
+  /// Телефон в формате +7XXXXXXXXXX
+  phone String
+
+  /// Email (опционально)
+  email   String?
+  /// Комментарий / описание проблемы
+  comment String?
+
+  /// Тип заявки (эвакуатор, автосервис, авар. комиссар, контрактные агрегаты)
+  leadType LeadType
+
+  // ── UTM-метки ──
+  utm_source   String?
+  utm_medium   String?
+  utm_campaign String?
+
+  // ── Флаги уведомлений ──
+  telegram_sent Boolean @default(false)
+  sms_sent      Boolean @default(false)
+  not_notified  Boolean @default(false)
+
+  // ── Метаданные ──
+  ip         String?
+  user_agent String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // ── Индексы ──
+  @@index([createdAt])
+  @@index([leadType])
+  @@index([not_notified])
+}
