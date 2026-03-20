@@ -3,6 +3,12 @@
 @tailwind utilities;
 
 :root {
+    /* Шрифты */
+    --font-unbounded: 'Unbounded', sans-serif;
+    --font-manrope: 'Manrope', sans-serif;
+    --font-jetbrains: 'JetBrains Mono', monospace;
+
+    /* Цвета */
     --color-primary: #E11D48;
     --color-secondary: #0F172A;
     --color-accent: #38BDF8;
