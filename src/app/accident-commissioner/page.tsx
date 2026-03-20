@@ -1,48 +1,68 @@
-import Link from "next/link";import type { Metadata } from "next";
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { Button } from '@/components/ui';
+import { Hero } from '@/components/sections';
 
 export const metadata: Metadata = {
-    title: "Accident Commissioner in Rostov-on-Don - AutoHub Rostov",
-    description: "Accident commissioner in Rostov-on-Don. Help with accidents, document processing.",
+  title: 'Аварийный комиссар в Ростове-на-Дону — AutoHub Rostov',
+  description:
+    'Аварийный комиссар в Ростове. Помощь при ДТП, оформление документов, работа со страховыми.',
 };
 
+const SERVICES = [
+  { title: 'Фиксация ДТП', desc: 'Профессиональная фото- и видеофиксация' },
+  { title: 'Оформление документов', desc: 'Помощь с оформлением всех необходимых бумаг' },
+  { title: 'Работа со страховой', desc: 'Защита ваших интересов перед страховой компанией' },
+  { title: 'Юридическая помощь', desc: 'Консультация по юридическим вопросам после ДТП' },
+] as const;
+
 export default function AccidentCommissionerPage() {
-    return (
-          <main className="min-h-screen bg-background">
-                <section className="bg-secondary text-white py-16 px-4">
-                        <div className="max-w-4xl mx-auto">
-                                  <Link href="/" className="text-accent hover:underline mb-6 inline-block">Back to Home</Link>
-                                  <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                                              Accident Commissioner
-                                  </h1>                                  <p className="text-xl text-gray-300 mb-8">
-                                              Professional help with accidents in Rostov-on-Don
-                                  </p>
-                                  <a
-                                                href="tel:+78634000000"
-                                                className="bg-primary hover:bg-red-700 text-white font-bold py-4 px-8 rounded-lg text-xl transition-colors inline-block"
-                                              >
-                                              Call Commissioner
-                                  </a>
-                        </div>
-                </section>
-          
-                <section className="py-16 px-4">
-                        <div className="max-w-4xl mx-auto">
-                                  <h2 className="text-3xl font-bold mb-8 text-secondary">What We Do</h2>
-                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    {[
-            { title: "Accident documentation", desc: "Professional photo and video documentation" },
-            { title: "Document processing", desc: "Help with all necessary documents" },
-            { title: "Insurance negotiations", desc: "Protecting your interests with insurance" },
-            { title: "Legal assistance", desc: "Legal consultation after accidents" },
-                        ].map((service) => (
-                                        <div key={service.title} className="bg-white rounded-xl p-6 shadow-md">
-                                                        <h3 className="text-lg font-bold mb-2 text-secondary">{service.title}</h3>
-                                                        <p className="text-gray-600">{service.desc}</p>
-                                        </div>
-                                      ))}
-                                  </div>
-                        </div>
-                </section>
-          </main>
-        );
+  return (
+    <>
+      <Hero
+        title="Аварийный комиссар"
+        subtitle="Профессиональная помощь при ДТП в Ростове-на-Дону. Выезд на место в течение 20 минут."
+      >
+        <div className="flex flex-col sm:flex-row gap-4">
+          <a href="tel:+78633030000">
+            <Button variant="primary" size="lg">📞 Вызвать комиссара</Button>
+          </a>
+          <Link href="/evacuation">
+            <Button variant="ghost" size="lg" className="border border-white/20 text-white hover:bg-white/10">
+              🆘 Нужен эвакуатор?
+            </Button>
+          </Link>
+        </div>
+      </Hero>
+
+      {/* Services */}
+      <section className="py-16 px-4">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="font-unbounded text-2xl md:text-3xl font-bold mb-8">Что мы делаем</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {SERVICES.map((s) => (
+              <div key={s.title} className="rounded-xl bg-surface p-6 shadow-md">
+                <h3 className="text-lg font-bold mb-2">{s.title}</h3>
+                <p className="text-gray-600 text-sm">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-16 px-4 bg-surface">
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="font-unbounded text-2xl font-bold mb-4">Попали в ДТП?</h2>
+          <p className="text-gray-600 mb-6">
+            Не паникуйте! Позвоните нам — аварийный комиссар приедет в течение 20 минут
+            и возьмёт все хлопоты на себя.
+          </p>
+          <a href="tel:+78633030000">
+            <Button variant="primary" size="lg">📞 Позвонить сейчас</Button>
+          </a>
+        </div>
+      </section>
+    </>
+  );
 }

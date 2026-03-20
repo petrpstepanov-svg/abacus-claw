@@ -1,67 +1,81 @@
-import Link from "next/link";
+import Link from 'next/link';
+import { Button } from '@/components/ui';
+import { Hero, ServiceCard } from '@/components/sections';
 
 export default function Home() {
-    return (
-          <main className="min-h-screen bg-background">
-            {/* Hero Section */}
-                <section className="bg-secondary text-white py-20 px-4">
-                        <div className="max-w-6xl mx-auto text-center">
-                                  <h1 className="text-4xl md:text-6xl font-bold mb-6 text-primary">
-                                              AutoHub Rostov
-                                  </h1>
-                                  <p className="text-xl md:text-2xl mb-8 text-gray-300">
-                                              Evacuator 24/7 - Autoservice - Accident Commissioner
-                                  </p>
-                                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                                              <Link
-                                                              href="/evacuation"
-                                                              className="bg-primary hover:bg-red-700 text-white font-bold py-4 px-8 rounded-lg text-lg transition-colors"
-                                                            >
-                                                            Call Evacuator
-                                              </Link>
-                                              <Link
-                                                              href="/autoservice"
-                                                              className="bg-accent hover:bg-sky-400 text-secondary font-bold py-4 px-8 rounded-lg text-lg transition-colors"
-                                                            >
-                                                            Autoservice
-                                              </Link>
-                                  </div>
-                        </div>
-                </section>
-          
-            {/* Services Grid */}
-                <section className="py-16 px-4">
-                        <div className="max-w-6xl mx-auto">
-                                  <h2 className="text-3xl font-bold text-center mb-12 text-secondary">
-                                              Our Services
-                                  </h2>
-                                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                              <Link href="/evacuation" className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow border-t-4 border-primary">
-                                                            <div className="text-4xl mb-4">Evacuator 24/7</div>
-                                                            <p className="text-gray-600">Fast evacuation any time of day</p>
-                                              </Link>
-                                              <Link href="/autoservice" className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow border-t-4 border-accent">
-                                                            <div className="text-4xl mb-4">Autoservice</div>
-                                                            <p className="text-gray-600">Professional car repair and maintenance</p>
-                                              </Link>
-                                              <Link href="/accident-commissioner" className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow border-t-4 border-secondary">
-                                                            <div className="text-4xl mb-4">Accident Commissioner</div>
-                                                            <p className="text-gray-600">Help with accidents, document processing</p>
-                                              </Link>
-                                  </div>
-                        </div>
-                </section>
-          
-            {/* Footer */}
-                <footer className="bg-secondary text-white py-8 px-4">
-                        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-                                  <p className="font-bold text-lg">AutoHub Rostov</p>
-                                  <div className="flex gap-6">
-                                              <Link href="/contacts" className="hover:text-accent transition-colors">Contacts</Link>
-                                              <Link href="/privacy-policy" className="hover:text-accent transition-colors">Privacy Policy</Link>
-                                  </div>
-                        </div>
-                </footer>
-          </main>
-        );
+  return (
+    <>
+      {/* Hero */}
+      <Hero
+        title="AutoHub Rostov"
+        subtitle="Эвакуатор 24/7 · Автосервис · Аварийный комиссар · Контрактные агрегаты"
+      >
+        <div className="flex flex-col sm:flex-row gap-4">
+          <Link href="/evacuation">
+            <Button variant="primary" size="lg">🆘 Вызвать эвакуатор</Button>
+          </Link>
+          <Link href="/autoservice">
+            <Button variant="accent" size="lg">Записаться в сервис</Button>
+          </Link>
+        </div>
+      </Hero>
+
+      {/* Services */}
+      <section className="py-16 px-4">
+        <div className="mx-auto max-w-6xl">
+          <h2 className="font-unbounded text-2xl md:text-3xl font-bold text-center mb-12">
+            Наши услуги
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <ServiceCard
+              href="/evacuation"
+              title="Эвакуатор 24/7"
+              description="Быстрая эвакуация в любое время суток. Подача от 30 минут."
+              borderColor="border-primary"
+            />
+            <ServiceCard
+              href="/autoservice"
+              title="Автосервис"
+              description="Профессиональный ремонт и обслуживание автомобилей."
+              borderColor="border-accent"
+            />
+            <ServiceCard
+              href="/accident-commissioner"
+              title="Аварийный комиссар"
+              description="Помощь при ДТП, оформление документов."
+              borderColor="border-secondary"
+            />
+            <ServiceCard
+              href="/contract-engines"
+              title="Контрактные агрегаты"
+              description="Подбор и установка контрактных двигателей и КПП."
+              borderColor="border-accent"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Why Us */}
+      <section className="py-16 px-4 bg-surface">
+        <div className="mx-auto max-w-5xl text-center">
+          <h2 className="font-unbounded text-2xl md:text-3xl font-bold mb-10">
+            Почему выбирают нас
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+            {[
+              { icon: '⏰', label: 'Работаем 24/7', desc: 'Круглосуточно, без выходных' },
+              { icon: '⚡', label: 'Подача от 30 мин', desc: 'Быстрый выезд по Ростову и области' },
+              { icon: '💰', label: 'Честные цены', desc: 'Без скрытых наценок и комиссий' },
+            ].map((item) => (
+              <div key={item.label} className="flex flex-col items-center gap-3">
+                <span className="text-4xl">{item.icon}</span>
+                <h3 className="font-semibold text-lg">{item.label}</h3>
+                <p className="text-gray-500 text-sm">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
+  );
 }

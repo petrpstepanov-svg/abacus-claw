@@ -1,22 +1,27 @@
-import type { Metadata } from "next";
-import "./fonts.css";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './fonts.css';
+import './globals.css';
+import { Header, Footer, MobileActionBar } from '@/components/layout';
 
 export const metadata: Metadata = {
-    title: "AutoHub Rostov - Evacuator, Autoservice, Accident Commissioner",
-    description: "AutoHub Rostov - evacuator 24/7, autoservice, accident commissioner in Rostov-on-Don",
+  title: 'AutoHub Rostov — Эвакуатор, Автосервис, Аварийный комиссар в Ростове-на-Дону',
+  description:
+    'Эвакуатор 24/7, автосервис, аварийный комиссар и контрактные агрегаты в Ростове-на-Дону. Быстро, надёжно, круглосуточно.',
 };
 
 export default function RootLayout({
-    children,
+  children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-    return (
-          <html lang="ru">
-                <body className="font-manrope bg-background text-secondary antialiased">
-                  {children}
-                </body>
-          </html>
-        );
+  return (
+    <html lang="ru">
+      <body className="font-manrope bg-background text-secondary antialiased">
+        <Header />
+        <main className="min-h-screen pb-16 md:pb-0">{children}</main>
+        <Footer />
+        <MobileActionBar />
+      </body>
+    </html>
+  );
 }
