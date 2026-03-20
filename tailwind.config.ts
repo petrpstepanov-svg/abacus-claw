@@ -13,6 +13,7 @@ const config: Config = {
                             secondary: "#0F172A",
                             accent: "#38BDF8",
                             background: "#F8FAFC",
+                            surface: "#FFFFFF",
                   },
                   fontFamily: {
                             unbounded: ["var(--font-unbounded)", "sans-serif"],
